@@ -31,7 +31,7 @@ const Banner = ({ searchQuery, setSearchQuery, searchRecipes }) => {
 };
 
 
-export default function Search() {
+export default function Search({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [searchedRecipes, setSearchedRecipes] = React.useState([]);
   const searchRecipes = async () => {
@@ -63,7 +63,7 @@ export default function Search() {
       <ScrollView>
         {searchedRecipes.length !== 0 ?
           searchedRecipes.map((recipe, index) => (
-            <RecipeCard key={index} id={index} props={recipe} />
+            <RecipeCard key={index} id={index} props={recipe} navigation={navigation}/>
           )) : searchQuery.trim() !== '' ? <Text>No recipes found!</Text> : <Text style={{color: "black"}}>Search now!</Text>}
       </ScrollView>
     </View>

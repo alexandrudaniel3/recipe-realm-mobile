@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { ScrollView } from "react-native";
 import RecipeCard from "../components/RecipeCard";
 
-export default function Featured() {
+export default function Featured({navigation}) {
   const [recipes, setRecipes] = useState([]);
 
   const getFeaturedRecipes = async () => {
@@ -26,6 +26,7 @@ export default function Featured() {
         <RecipeCard
           key={index}
           props={recipe}
+          navigation={navigation}
           />))
       }
     </ScrollView>

@@ -2,7 +2,7 @@ import { Pressable, ScrollView, Text, Touchable, View } from "react-native";
 import RecipeCard from "../components/RecipeCard";
 import React, { useEffect, useState } from "react";
 
-export default function Categories() {
+export default function Categories({navigation}) {
   const [categories, setCategories] = React.useState([]);
   const [selectedCategory, setSelectedCategory] = React.useState('');
   const [recipesByCategory, setRecipesByCategory] = React.useState([]);
@@ -56,7 +56,7 @@ export default function Categories() {
       <ScrollView>
         {recipesByCategory.length !== 0 ?
           recipesByCategory.map((recipe, index) => (
-            <RecipeCard key={index} id={index} props={recipe} />
+            <RecipeCard key={index} id={index} props={recipe} navigation={navigation}/>
           )) : null}
       </ScrollView>
     )

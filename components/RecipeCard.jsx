@@ -2,12 +2,17 @@ import React from 'react';
 import { View, Text, TouchableOpacity, Image, StyleSheet } from 'react-native';
 import LinearGradient from "react-native-linear-gradient";
 
-const RecipeCard = ({ id, props }) => {
+const RecipeCard = ({ id, props, navigation }) => {
   return (
     <TouchableOpacity
       delayPressIn={10} delayPressOut={10} delayLongPress={10}
       style={styles.recipeCardWrapper}
-      onPress={() => console.log('Card pressed')}
+      onPress={() => {
+        /* 1. Navigate to the Details route with params */
+        navigation.navigate('Recipe', {
+          recipeID: props.idMeal,
+        });
+      }}
     >
       <LinearGradient
         colors={['#C94061FF', '#802C6DFF', '#6E449CFF', '#5257A7FF']}
