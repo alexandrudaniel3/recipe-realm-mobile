@@ -44,6 +44,24 @@ export default function Categories() {
     searchByCategory();
   }, [selectedCategory]);
 
+  const displayRecipesByCategory = () => {
+    if (!selectedCategory || !recipesByCategory) {
+      return (
+        <View>
+          <Text>Select a category.</Text>
+        </View>
+      );
+    }
+    return (
+      <ScrollView>
+        {recipesByCategory.length !== 0 ?
+          recipesByCategory.map((recipe, index) => (
+            <RecipeCard key={index} id={index} props={recipe} />
+          )) : null}
+      </ScrollView>
+    )
+  }
+
   return (
     <View style={{ flex: 1 }}>
       <View style={{flex: 1}}>
@@ -57,12 +75,7 @@ export default function Categories() {
         </ScrollView>
       </View>
       <View style={{flex: 10}}>
-        <ScrollView>
-          {recipesByCategory.length !== 0 ?
-            recipesByCategory.map((recipe, index) => (
-              <RecipeCard key={index} id={index} props={recipe} />
-            )) :  <Text style={{color: "black"}}>Select a category</Text>}
-        </ScrollView>
+        {displayRecipesByCategory()}
       </View>
     </View>
   );
