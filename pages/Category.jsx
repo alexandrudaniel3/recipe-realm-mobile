@@ -36,7 +36,7 @@ export default function Category({ route, navigation }) {
         <Pressable style={styles.categoryBack}
                    onPress={() => navigation.goBack()}
                    hitSlop = {50}>
-          <Text style={styles.categoryBack}>Back</Text>
+          <Text style={styles.categoryBack}>All</Text>
         </Pressable>
         <Text style={styles.categoryTitle}>{selectedCategory}</Text>
       </View>
