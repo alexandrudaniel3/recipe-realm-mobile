@@ -57,7 +57,7 @@ function App() {
           <Tab.Screen name="Featured" component={FeaturedStack} />
           <Tab.Screen name="Search" component={SearchStack} />
           <Tab.Screen name="Categories" component={CategoriesStack} />
-          <Tab.Screen name="Favorites" component={FavoritesStack} />
+          {/*<Tab.Screen name="Favorites" component={FavoritesStack} />*/}
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaView>

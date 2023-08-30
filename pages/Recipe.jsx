@@ -1,6 +1,7 @@
 import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
 import React, { useEffect } from "react";
 import CheckBox from "@react-native-community/checkbox";
+import LinearGradient from "react-native-linear-gradient";
 
 export default function Recipe({ route }) {
   const { recipeID } = route.params;
@@ -39,13 +40,20 @@ export default function Recipe({ route }) {
     }
 
     return (
-      <View style={styles.recipeHeader}>
-        {recipeData.strMealThumb ? <Image source={{ uri: recipeData.strMealThumb }}
-                                          style={styles.recipeImage} /> : null}
-        <Text style={styles.recipeTitle}>{recipeData.strMeal}</Text>
-        <Text style={styles.recipeCategoryAndCuisine}>Category: {recipeData.strCategory}</Text>
-        <Text style={styles.recipeCategoryAndCuisine}>Cuisine: {recipeData.strArea}</Text>
-      </View>
+      <LinearGradient
+        colors={["#C94061FF", "#802C6DFF", "#6E449CFF", "#5257A7FF"]}
+        style={styles.recipeHeaderWrapper}
+      >
+        <View style={styles.recipeHeader}>
+          {recipeData.strMealThumb ? <Image source={{ uri: recipeData.strMealThumb }}
+                                            style={styles.recipeImage} /> : null}
+          <View style={styles.recipeHeaderText}>
+            <Text style={styles.recipeTitle}>{recipeData.strMeal}</Text>
+            <Text style={styles.recipeCategoryAndCuisine}>Category: {recipeData.strCategory}</Text>
+            <Text style={styles.recipeCategoryAndCuisine}>Cuisine: {recipeData.strArea}</Text>
+          </View>
+        </View>
+      </LinearGradient>
     );
   };
 
@@ -68,7 +76,9 @@ export default function Recipe({ route }) {
           {formattedIngredients.map((ingredient, index) => (
             <View key={index} style={styles.ingredientRow}>
               <CheckBox disabled={false} value={ingredient.checked}
-                        onValueChange={(newValue) => ingredientCheckHandler(index, newValue)} />
+                        onValueChange={(newValue) => ingredientCheckHandler(index, newValue)}
+                        tintColors={{ true: '#6e449c', false: '#6E449CFF' }}
+                        />
               <Text style={styles.ingredientText}>
                 {ingredient.measure + " " + ingredient.ingredient}
               </Text>
@@ -105,11 +115,22 @@ export default function Recipe({ route }) {
 }
 
 const styles = StyleSheet.create({
-    recipeHeader: {
+    recipeHeaderWrapper: {
       margin: 10,
+      borderRadius: 23,
+    },
+    recipeHeader: {
+      borderRadius: 18,
+      margin: 5,
+      backgroundColor: "white",
     },
     recipeImage: {
       height: 300,
+      borderTopLeftRadius: 18,
+      borderTopRightRadius: 18,
+    },
+    recipeHeaderText: {
+      margin: 15,
     },
     recipeTitle: {
       textAlign: "center",
@@ -126,7 +147,8 @@ const styles = StyleSheet.create({
       paddingHorizontal: 20,
     },
     sectionTitle: {
-      fontSize: 18,
+      fontSize: 30,
+      textAlign: "center",
       fontWeight: "bold",
       marginBottom: 10,
       color: "#6E449CFF",
