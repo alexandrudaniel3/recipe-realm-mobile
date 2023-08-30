@@ -37,6 +37,7 @@ const RecipeCard = ({ id, props, navigation }) => {
 const styles = StyleSheet.create({
   recipeCardWrapper: {
     margin: 10,
+    marginTop: 0,
     borderRadius: 23,
   },
   recipeCard: {

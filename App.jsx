@@ -9,6 +9,7 @@ import Categories from "./pages/Categories";
 import Favorites from "./pages/Favorites";
 import Recipe from "./pages/Recipe";
 import LinearGradient from "react-native-linear-gradient";
+import Category from "./pages/Category";
 
 function App() {
   const Stack = createStackNavigator();
@@ -35,6 +36,7 @@ function App() {
     return (
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="CategoriesScreen" component={Categories} />
+        <Stack.Screen name="Category" component={Category} />
         <Stack.Screen name="Recipe" component={Recipe} />
       </Stack.Navigator>
     );
@@ -60,7 +62,7 @@ function App() {
             tabBarInactiveTintColor: "#555",
             headerBackground: () => (
               <LinearGradient
-                colors={["#a13388", "#10356c"]}
+                colors={["#C94061FF", "#802C6DFF", "#6E449CFF", "#5257A7FF"]}
                 style={{ flex: 1 }}
                 start={{ x: 0, y: 0 }}
                 end={{ x: 1, y: 0 }}
