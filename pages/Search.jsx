@@ -1,7 +1,6 @@
 import { StyleSheet, ScrollView, Text, TextInput, View, KeyboardAvoidingView } from "react-native";
 import RecipeCard from "../components/RecipeCard";
 import React, { useState } from "react";
-import { SearchBar } from "@rneui/themed";
 import LinearGradient from "react-native-linear-gradient";
 import { Searchbar } from "react-native-paper";
 
@@ -15,6 +14,7 @@ const Banner = ({ searchQuery, setSearchQuery, searchRecipes }) => {
   return (
     <View style={styles.banner}>
       <LinearGradient
+        start={{x: 0, y: 0}} end={{x: 1, y: 0}}
         colors={["#C94061FF", "#802C6DFF", "#6E449CFF", "#5257A7FF"]}
         style={styles.searchBarContainer}
       >
@@ -23,6 +23,11 @@ const Banner = ({ searchQuery, setSearchQuery, searchRecipes }) => {
           placeholder="Search Here"
           onChangeText={onChangeSearch}
           value={searchQuery}
+          placeholderTextColor="white"
+          inputStyle={{color: "white"}}
+          icon={require('../assets/search-icon-64px.png')}
+          iconColor={"white"}
+          clearIcon={require('../assets/clear-icon-64px.png')}
         />
 
       </LinearGradient>
@@ -34,17 +39,18 @@ const Banner = ({ searchQuery, setSearchQuery, searchRecipes }) => {
 export default function Search({navigation}) {
   const [searchQuery, setSearchQuery] = React.useState("");
   const [searchedRecipes, setSearchedRecipes] = React.useState([]);
+  const [loading, setLoading] = useState(false);
   const searchRecipes = async () => {
     if (searchQuery.trim() === '') {
       setSearchedRecipes([]);
       return;
     }
 
-
+    setLoading(true);
     const results = await fetch("https://www.themealdb.com/api/json/v1/1/search.php?s=" + searchQuery.trim())
       .then(response => response.json())
       .then(data => data.meals);
-
+    setLoading(false);
     if (!results) {
       setSearchedRecipes([]);
       return;
@@ -64,7 +70,7 @@ export default function Search({navigation}) {
         {searchedRecipes.length !== 0 ?
           searchedRecipes.map((recipe, index) => (
             <RecipeCard key={index} id={index} props={recipe} navigation={navigation}/>
-          )) : searchQuery.trim() !== '' ? <Text>No recipes found!</Text> : <Text style={{color: "black"}}>Search now!</Text>}
+          )) : searchQuery.trim() === '' ? <Text style={styles.resultsPlaceholderText}>Search now :)</Text> : loading ? null : <Text style={styles.resultsPlaceholderText}>No recipes found.</Text>}
       </ScrollView>
     </View>
   );
@@ -90,5 +96,11 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     width: "100%",
   },
-
+  resultsPlaceholderText: {
+    fontSize: 30,
+    textAlign: "center",
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#6E449CFF",
+  }
 });
