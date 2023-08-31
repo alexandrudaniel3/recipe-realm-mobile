@@ -106,7 +106,17 @@ function App() {
                           />
                         ),
                       }} />
-          {/*<Tab.Screen name="Favorites" component={FavoritesStack} />*/}
+          <Tab.Screen name="Favorites"
+                      component={FavoritesStack}
+                      options={{
+                        tabBarIcon: ({ size, focused }) => (
+                          <Image
+                            source={require("./assets/heart-full.png")}
+                            style={{ width: size, height: size, tintColor: focused ? "#6E449CFF" : "gray" }}
+                          />
+                        ),
+                      }}
+          />
         </Tab.Navigator>
       </NavigationContainer>
     </SafeAreaView>

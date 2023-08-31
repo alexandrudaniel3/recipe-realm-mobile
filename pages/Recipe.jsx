@@ -1,12 +1,14 @@
-import { View, Text, StyleSheet, Image, ScrollView } from "react-native";
-import React, { useEffect } from "react";
+import { View, Text, StyleSheet, Image, ScrollView, ImageBackground, Pressable } from "react-native";
+import React, { useEffect, useState } from "react";
 import CheckBox from "@react-native-community/checkbox";
 import LinearGradient from "react-native-linear-gradient";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function Recipe({ route }) {
   const { recipeID } = route.params;
   const [recipeData, setRecipeData] = React.useState({});
   const [formattedIngredients, setFormattedIngredients] = React.useState([]);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const getRecipe = async () => {
     const response = await fetch("https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + recipeID);
@@ -28,7 +30,47 @@ export default function Recipe({ route }) {
 
     setFormattedIngredients(newIngredients);
 
+    const favoriteCheck = await checkIfFavorite();
+    setIsFavorite(favoriteCheck);
   };
+
+  const favoriteButtonHandler = () => {
+    if (isFavorite) {
+      removeFromFavorites();
+    } else {
+      addToFavorites();
+    }
+  }
+  const addToFavorites = async () => {
+    try {
+      await AsyncStorage.setItem(recipeID, JSON.stringify(recipeData));
+      setIsFavorite(true);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const removeFromFavorites = async () => {
+    try {
+      await AsyncStorage.removeItem(recipeID);
+      setIsFavorite(false);
+    } catch (e) {
+      console.log(e);
+    }
+  }
+
+  const checkIfFavorite = async () => {
+    try {
+      const value = await AsyncStorage.getItem(recipeID);
+      if (value !== null) {
+        return true;
+      } else {
+        return false;
+      }
+    } catch (e) {
+      console.log(e);
+    }
+  }
 
   useEffect(() => {
     getRecipe();
@@ -41,13 +83,30 @@ export default function Recipe({ route }) {
 
     return (
       <LinearGradient
-        start={{x: 0, y: 0}} end={{x: 1, y: 0}}
+        start={{ x: 0, y: 0 }} end={{ x: 1, y: 0 }}
         colors={["#C94061FF", "#802C6DFF", "#6E449CFF", "#5257A7FF"]}
         style={styles.recipeHeaderWrapper}
       >
         <View style={styles.recipeHeader}>
-          {recipeData.strMealThumb ? <Image source={{ uri: recipeData.strMealThumb }}
-                                            style={styles.recipeImage} /> : null}
+          {recipeData.strMealThumb ?
+            <ImageBackground
+              source={{ uri: recipeData.strMealThumb }}
+              style={styles.recipeImage}>
+              <Pressable
+                style={styles.recipeFavoriteButton}
+                onPress={favoriteButtonHandler}
+              >
+                {isFavorite ? <Image
+                  source={require('../assets/heart-full.png')}
+                  style={{width: 35, height: 35,
+                    resizeMode: "contain"}}
+                /> : <Image
+                  source={require('../assets/heart-empty.png')}
+                  style={{width: 35, height: 35,
+                    resizeMode: "contain"}}
+                />}
+              </Pressable>
+            </ImageBackground> : null}
           <View style={styles.recipeHeaderText}>
             <Text style={styles.recipeTitle}>{recipeData.strMeal}</Text>
             <Text style={styles.recipeCategoryAndCuisine}>Category: {recipeData.strCategory}</Text>
@@ -78,8 +137,8 @@ export default function Recipe({ route }) {
             <View key={index} style={styles.ingredientRow}>
               <CheckBox disabled={false} value={ingredient.checked}
                         onValueChange={(newValue) => ingredientCheckHandler(index, newValue)}
-                        tintColors={{ true: '#6e449c', false: '#6E449CFF' }}
-                        />
+                        tintColors={{ true: "#6e449c", false: "#6E449CFF" }}
+              />
               <Text style={styles.ingredientText}>
                 {ingredient.measure + " " + ingredient.ingredient}
               </Text>
@@ -131,14 +190,28 @@ const styles = StyleSheet.create({
         width: 0,
         height: 9,
       },
-      shadowOpacity:  0.22,
+      shadowOpacity: 0.22,
       shadowRadius: 9.22,
-      elevation: 12
+      elevation: 12,
+      overflow: "hidden",
     },
     recipeImage: {
       height: 300,
       borderTopLeftRadius: 18,
       borderTopRightRadius: 18,
+      flex: 1,
+      justifyContent: "flex-end",
+      alignItems: "flex-end",
+    },
+    recipeFavoriteButton: {
+      backgroundColor: "#C94061FF",
+      width: 65,
+      height: 65,
+      position: "relative",
+      margin: 10,
+      borderRadius: 50,
+      alignItems: 'center',
+      justifyContent: 'center',
     },
     recipeHeaderText: {
       margin: 15,
@@ -146,8 +219,9 @@ const styles = StyleSheet.create({
     recipeTitle: {
       textAlign: "center",
       color: "#6E449CFF",
-      fontWeight: "500",
+      fontWeight: "bold",
       fontSize: 30,
+      marginBottom: 10,
     },
     recipeCategoryAndCuisine: {
       textAlign: "center",
