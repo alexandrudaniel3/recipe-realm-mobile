@@ -26,6 +26,7 @@
     "react-native-reanimated": "^3.4.2",
     "react-native-safe-area-context": "^4.7.1",
     "react-native-screens": "^3.24.0",
+    "react-native-splash-screen": "^3.3.0",
     "react-native-text-gradient": "^0.1.7"
   },
   "devDependencies": {

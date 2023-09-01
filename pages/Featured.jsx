@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import RecipeCard from "../components/RecipeCard";
+import SplashScreen from "react-native-splash-screen";
 
 export default function Featured({ navigation }) {
   const [recipes, setRecipes] = useState([]);
@@ -19,6 +20,8 @@ export default function Featured({ navigation }) {
 
   useEffect(() => {
     getFeaturedRecipes();
+
+    SplashScreen.hide();
   }, []);
 
   return (
