@@ -32,6 +32,8 @@ export default function Recipe({ route }) {
 
     const favoriteCheck = await checkIfFavorite();
     setIsFavorite(favoriteCheck);
+
+    console.log(favoriteCheck);
   };
 
   const favoriteButtonHandler = () => {
@@ -41,9 +43,10 @@ export default function Recipe({ route }) {
       addToFavorites();
     }
   }
+
   const addToFavorites = async () => {
     try {
-      await AsyncStorage.setItem(recipeID, JSON.stringify(recipeData));
+      await AsyncStorage.setItem('recipe:' + recipeID, JSON.stringify(recipeData));
       setIsFavorite(true);
     } catch (e) {
       console.log(e);
@@ -52,16 +55,35 @@ export default function Recipe({ route }) {
 
   const removeFromFavorites = async () => {
     try {
-      await AsyncStorage.removeItem(recipeID);
+      await AsyncStorage.removeItem('recipe:' + recipeID);
       setIsFavorite(false);
     } catch (e) {
       console.log(e);
     }
   }
 
+  const FavoriteButton = () => {
+    return (
+      <Pressable
+        style={styles.recipeFavoriteButton}
+        onPress={favoriteButtonHandler}
+      >
+        {isFavorite ? <Image
+          source={require('../assets/heart-full.png')}
+          style={{width: 35, height: 35,
+            resizeMode: "contain"}}
+        /> : <Image
+          source={require('../assets/heart-empty.png')}
+          style={{width: 35, height: 35,
+            resizeMode: "contain"}}
+        />}
+      </Pressable>
+    )
+  }
+
   const checkIfFavorite = async () => {
     try {
-      const value = await AsyncStorage.getItem(recipeID);
+      const value = await AsyncStorage.getItem('recipe:' + recipeID);
       if (value !== null) {
         return true;
       } else {
@@ -92,20 +114,7 @@ export default function Recipe({ route }) {
             <ImageBackground
               source={{ uri: recipeData.strMealThumb }}
               style={styles.recipeImage}>
-              <Pressable
-                style={styles.recipeFavoriteButton}
-                onPress={favoriteButtonHandler}
-              >
-                {isFavorite ? <Image
-                  source={require('../assets/heart-full.png')}
-                  style={{width: 35, height: 35,
-                    resizeMode: "contain"}}
-                /> : <Image
-                  source={require('../assets/heart-empty.png')}
-                  style={{width: 35, height: 35,
-                    resizeMode: "contain"}}
-                />}
-              </Pressable>
+              <FavoriteButton />
             </ImageBackground> : null}
           <View style={styles.recipeHeaderText}>
             <Text style={styles.recipeTitle}>{recipeData.strMeal}</Text>
@@ -145,9 +154,24 @@ export default function Recipe({ route }) {
             </View>
           ))}
         </View>
+        <View>
+          <Pressable onPress={addToShoppingList}><Text style={styles.shoppingListButton}>Add Ingredients to Shopping List</Text></Pressable>
+        </View>
       </View>
     );
   };
+
+  const addToShoppingList = async () => {
+    const shoppingList = formattedIngredients.map((element, index) => {
+      return {
+        id: index,
+        checked: false,
+        text: element.measure + ' ' + element.ingredient
+      }
+    });
+
+    await AsyncStorage.setItem('list:' + recipeData.strMeal, JSON.stringify(shoppingList));
+  }
 
   const recipeDirections = () => {
     if (!recipeData) {
@@ -246,6 +270,13 @@ const styles = StyleSheet.create({
     },
     ingredientText: {
       marginLeft: 10,
+      color: "#6E449CFF",
+    },
+    shoppingListButton: {
+      fontSize: 20,
+      textAlign: "center",
+      marginTop: 5,
+      fontWeight: "bold",
       color: "#6E449CFF",
     },
     instructionsContainer: {

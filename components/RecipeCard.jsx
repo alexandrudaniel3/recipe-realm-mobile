@@ -65,7 +65,7 @@ const styles = StyleSheet.create({
   recipeTitle: {
     textAlign: "center",
     color: "#6E449CFF",
-    fontWeight: "500",
+    fontWeight: "bold",
     fontSize: 30,
   },
 });

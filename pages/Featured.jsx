@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
+import { ScrollView, View, StyleSheet, Pressable, Text, Image } from "react-native";
 import RecipeCard from "../components/RecipeCard";
 import SplashScreen from "react-native-splash-screen";
+import shoppingBag from '../assets/shopping-bag.png';
+
 
 export default function Featured({ navigation }) {
   const [recipes, setRecipes] = useState([]);
@@ -26,6 +28,15 @@ export default function Featured({ navigation }) {
 
   return (
     <View style={styles.featuredMain}>
+      <ScrollView style={{height: 100}}>
+        <Pressable onPress={() => {
+          navigation.navigate("ShoppingList");
+        }}
+        style={{width: 80, alignItems: "center"}}>
+          <Image source={shoppingBag} style={{ width: 50, height: undefined, aspectRatio: 1}}/>
+          <Text style={{textAlign: "center", color: "#C94061FF" }}>Shopping List</Text>
+        </Pressable>
+      </ScrollView>
       <ScrollView>
         {recipes.map((recipe, index) => (
           <RecipeCard

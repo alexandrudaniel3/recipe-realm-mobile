@@ -13,21 +13,21 @@ export default function Favorites({navigation}) {
     let keys = [];
     try {
       keys = await AsyncStorage.getAllKeys();
-      setFavoriteRecipesIDs(keys);
-      console.log(keys);
+      const recipeKeys = keys.filter((element) => element.includes('recipe'));
+      setFavoriteRecipesIDs(recipeKeys);
     } catch (e) {
 
     }
   }
 
   const getFavoriteRecipesTitles = async () => {
-    let titles = [];
+    let recipes = [];
     for (let id of favoriteRecipesIDs) {
       let recipeDataJson = await AsyncStorage.getItem(id);
-      titles.push(JSON.parse(recipeDataJson));
+      recipes.push(JSON.parse(recipeDataJson));
     }
 
-    setFavoriteRecipesData(titles);
+    setFavoriteRecipesData(recipes);
   }
 
   useEffect(() => {

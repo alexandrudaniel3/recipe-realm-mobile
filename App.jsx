@@ -10,7 +10,7 @@ import Favorites from "./pages/Favorites";
 import Recipe from "./pages/Recipe";
 import LinearGradient from "react-native-linear-gradient";
 import Category from "./pages/Category";
-import { transparent } from "react-native-paper/lib/typescript/styles/themes/v2/colors";
+import ShoppingList from "./pages/ShoppingList";
 
 function App() {
   const Stack = createStackNavigator();
@@ -20,6 +20,7 @@ function App() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name="FeaturedScreen" component={Featured} />
         <Stack.Screen name="Recipe" component={Recipe} />
+        <Stack.Screen name="ShoppingList" component={ShoppingList} />
       </Stack.Navigator>
     );
   };

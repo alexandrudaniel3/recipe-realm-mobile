@@ -66,7 +66,7 @@ export default function Search({navigation}) {
   return (
     <View style={{ flex: 1 }}>
       <Banner searchQuery={searchQuery} setSearchQuery={setSearchQuery} searchRecipes={searchRecipes} />
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps='handled'>
         {searchedRecipes.length !== 0 ?
           searchedRecipes.map((recipe, index) => (
             <RecipeCard key={index} id={index} props={recipe} navigation={navigation}/>
