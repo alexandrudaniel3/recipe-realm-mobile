@@ -3,6 +3,7 @@ import { ScrollView, View, StyleSheet, Pressable, Text, Image } from "react-nati
 import RecipeCard from "../components/RecipeCard";
 import SplashScreen from "react-native-splash-screen";
 import shoppingBag from '../assets/shopping-bag.png';
+import scale from '../assets/scale.png';
 
 
 export default function Featured({ navigation }) {
@@ -28,7 +29,7 @@ export default function Featured({ navigation }) {
 
   return (
     <View style={styles.featuredMain}>
-      <ScrollView style={{height: 100}}>
+      <ScrollView style={{height: 100}} horizontal={true}>
         <Pressable onPress={() => {
           navigation.navigate("ShoppingList");
         }}
@@ -36,6 +37,13 @@ export default function Featured({ navigation }) {
           <Image source={shoppingBag} style={{ width: 50, height: undefined, aspectRatio: 1}}/>
           <Text style={{textAlign: "center", color: "#C94061FF" }}>Shopping List</Text>
         </Pressable>
+        <Pressable onPress={() => {
+        navigation.navigate("UnitConverter");
+      }}
+                               style={{width: 80, alignItems: "center"}}>
+        <Image source={scale} style={{ width: 50, height: undefined, aspectRatio: 1}}/>
+        <Text style={{textAlign: "center", color: "#802C6DFF" }}>Unit Converter</Text>
+      </Pressable>
       </ScrollView>
       <ScrollView>
         {recipes.map((recipe, index) => (

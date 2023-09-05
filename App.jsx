@@ -11,6 +11,7 @@ import Recipe from "./pages/Recipe";
 import LinearGradient from "react-native-linear-gradient";
 import Category from "./pages/Category";
 import ShoppingList from "./pages/ShoppingList";
+import UnitConverter from "./pages/UnitConverter";
 
 function App() {
   const Stack = createStackNavigator();
@@ -21,6 +22,7 @@ function App() {
         <Stack.Screen name="FeaturedScreen" component={Featured} />
         <Stack.Screen name="Recipe" component={Recipe} />
         <Stack.Screen name="ShoppingList" component={ShoppingList} />
+        <Stack.Screen name="UnitConverter" component={UnitConverter} />
       </Stack.Navigator>
     );
   };
