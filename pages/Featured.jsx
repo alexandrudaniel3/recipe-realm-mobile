@@ -4,6 +4,7 @@ import RecipeCard from "../components/RecipeCard";
 import SplashScreen from "react-native-splash-screen";
 import shoppingBag from '../assets/shopping-bag.png';
 import scale from '../assets/scale.png';
+import settingsIcon from '../assets/settings.png';
 
 
 export default function Featured({ navigation }) {
@@ -29,7 +30,7 @@ export default function Featured({ navigation }) {
 
   return (
     <View style={styles.featuredMain}>
-      <ScrollView style={{height: 100}} horizontal={true}>
+      <ScrollView style={{height: 100, marginHorizontal: 5}} horizontal={true}>
         <Pressable onPress={() => {
           navigation.navigate("ShoppingList");
         }}
@@ -44,6 +45,13 @@ export default function Featured({ navigation }) {
         <Image source={scale} style={{ width: 50, height: undefined, aspectRatio: 1}}/>
         <Text style={{textAlign: "center", color: "#802C6DFF" }}>Unit Converter</Text>
       </Pressable>
+        <Pressable onPress={() => {
+          navigation.navigate("Settings");
+        }}
+                   style={{width: 80, alignItems: "center"}}>
+          <Image source={settingsIcon} style={{ width: 50, height: undefined, aspectRatio: 1}}/>
+          <Text style={{textAlign: "center", color: "#6E449CFF" }}>Settings</Text>
+        </Pressable>
       </ScrollView>
       <ScrollView>
         {recipes.map((recipe, index) => (

@@ -13,6 +13,7 @@ import Category from "./pages/Category";
 import ShoppingList from "./pages/ShoppingList";
 import UnitConverter from "./pages/UnitConverter";
 import FlashMessage from "react-native-flash-message";
+import Settings from "./pages/Settings";
 
 function App() {
   const Stack = createStackNavigator();
@@ -24,6 +25,7 @@ function App() {
         <Stack.Screen name="Recipe" component={Recipe} />
         <Stack.Screen name="ShoppingList" component={ShoppingList} />
         <Stack.Screen name="UnitConverter" component={UnitConverter} />
+        <Stack.Screen name="Settings" component={Settings} />
       </Stack.Navigator>
     );
   };
