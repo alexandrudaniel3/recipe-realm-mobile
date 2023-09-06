@@ -183,11 +183,11 @@ export function convertData(fromUnit, toUnit, value, density) {
           case 'v:l':
             return value / density;
           case 'v:tsp' :
-            return value * (202.8841 * density);
+            return value * (202.8841 / density);
           case 'v:tbsp' :
-            return value / (67.628 * density);
+            return value * (67.628 / density);
           case 'v:cup' :
-            return value / (4.2268 * density);
+            return value * (4.2268 / density);
         }
         break;
       case 'm:oz' :

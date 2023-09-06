@@ -1,8 +1,9 @@
 import { useEffect, useState } from "react";
 import DropDownPicker from "react-native-dropdown-picker";
 import { units, ingredientsDensity } from "../utils/conversionData";
-import { View, Text, TextInput, StyleSheet } from "react-native";
+import { View, Text, TextInput, StyleSheet, Platform } from "react-native";
 import { convertData } from "../utils/conversionData";
+import { Dropdown } from "react-native-element-dropdown";
 
 function ValueBox({ value, setValue }) {
 
@@ -44,7 +45,7 @@ export default function RecipeConverter() {
     if (value) {
       let test = convertData(fromUnit, toUnit, value, ingredientDensity);
       if (typeof test === "number") {
-        test = test.toFixed(3);
+        test = +parseFloat(test.toFixed(3));
       }
       setResult(value + fromUnit.substring(2) + " = " + test + toUnit.substring(2));
     } else {
@@ -54,23 +55,27 @@ export default function RecipeConverter() {
 
   useEffect(() => {
     handleSubmit();
-  }, [fromUnit, toUnit, value]);
+  }, [fromUnit, toUnit, value, ingredientDensity]);
 
   const DisplayIngredientPicker = () => {
     if ((fromUnit.includes("m:") && toUnit.includes("v:")) || (fromUnit.includes("v:") && toUnit.includes("m:"))) {
       return (
-        <View style={{ zIndex: 1000 }}>
-          <Text style={styles.volumeWarning}>In order to convert mass to volume and vice versa, please select an ingredient:</Text>
-          <DropDownPicker setValue={setIngredientDensity} value={ingredientDensity} items={ingredientsDensity}
-                          open={ingredientOpen}
-                          setOpen={(open) => {
-                            setIngredientOpen(open);
-                            if (open) {
-                              closeOtherPickers("ingredient");
-                            }
-                          }}
-                          zIndex={1000} zIndexInverse={2000} itemKey="label"
-                          showTickIcon={false} style={styles.selector} />
+        <View>
+          <Text style={styles.volumeWarning}>In order to convert mass to volume and vice versa, please select an
+            ingredient:</Text>
+          <Dropdown
+            onChange={item => {
+              setIngredientDensity(item.value);
+            }}
+            value={ingredientDensity}
+            data={ingredientsDensity}
+            labelField="label"
+            valueField="value"
+            style={styles.selector}
+            selectedTextStyle={styles.selectorText}
+            itemTextStyle={styles.selectorText}
+            autoScroll={false}
+          />
         </View>
       );
     } else {
@@ -82,30 +87,31 @@ export default function RecipeConverter() {
   return (
     <View style={{ marginHorizontal: 10 }}>
       <Text style={styles.fromTo}>From:</Text>
-      <DropDownPicker setValue={setFromUnit} value={fromUnit} items={units} open={fromOpen} setOpen={(open) => {
-        setFromOpen(open);
-        if (open) {
-          closeOtherPickers("from");
-        }
-      }}
-                      zIndex={3000} zIndexInverse={1000} showTickIcon={false}
-                      style={styles.selector} />
+      <Dropdown
+        onChange={item => setFromUnit(item.value)}
+        value={fromUnit}
+        data={units}
+        labelField="label"
+        valueField="value"
+        style={styles.selector}
+        selectedTextStyle={styles.selectorText}
+        itemTextStyle={styles.selectorText}
+        autoScroll={false}
+      />
       <Text style={styles.fromTo}>To:</Text>
-      <DropDownPicker setValue={setToUnit} value={toUnit} items={units} open={toOpen} setOpen={(open) => {
-        setToOpen(open);
-        if (open) {
-          closeOtherPickers("to");
-        }
-      }}
-                      zIndex={2000} zIndexInverse={2000} showTickIcon={false}
-                      style={styles.selector} />
+      <Dropdown
+        onChange={item => setToUnit(item.value)}
+        value={toUnit}
+        data={units}
+        labelField="label"
+        valueField="value"
+        style={styles.selector}
+        selectedTextStyle={styles.selectorText}
+        itemTextStyle={styles.selectorText}
+        autoScroll={false}
+      />
       <DisplayIngredientPicker />
       <ValueBox setValue={setValue} />
-      <View style={{ zIndex: 100 }}>
-        {/*<Pressable onPress={handleSubmit} style={styles.convertButtonContainer}>*/}
-        {/*  <Text style={styles.convertButton}>Convert</Text>*/}
-        {/*</Pressable>*/}
-      </View>
       {result ?
         <Text style={styles.resultText}>{result}</Text> :
         null}
@@ -117,21 +123,27 @@ const styles = StyleSheet.create({
     selector: {
       borderStyle: "solid",
       borderColor: "#6E449CFF",
+      borderRadius: 10,
       borderWidth: 2,
+      padding: 5,
       marginVertical: 5,
       width: "80%",
       alignSelf: "center",
+      color: "#6E449CFF",
+    },
+    selectorText: {
+      color: "#6E449CFF",
     },
     fromTo: {
       width: "75%",
       alignSelf: "center",
       color: "#6E449CFF",
     },
-  volumeWarning: {
-    color: "#6E449CFF",
-    textAlign: "center",
-    fontSize: 20,
-  },
+    volumeWarning: {
+      color: "#6E449CFF",
+      textAlign: "center",
+      fontSize: 20,
+    },
     textInput: {
       borderStyle: "solid",
       borderColor: "#6E449CFF",
@@ -157,7 +169,7 @@ const styles = StyleSheet.create({
       borderRadius: 7,
       color: "white",
       fontWeight: "bold",
-      textAlign: "center"
+      textAlign: "center",
     },
     resultText: {
       alignSelf: "center",
