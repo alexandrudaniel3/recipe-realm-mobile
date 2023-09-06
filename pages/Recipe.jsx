@@ -3,12 +3,16 @@ import React, { useEffect, useState } from "react";
 import CheckBox from "@react-native-community/checkbox";
 import LinearGradient from "react-native-linear-gradient";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { showMessage } from "react-native-flash-message";
+import { useIsFocused } from "@react-navigation/native";
 
 export default function Recipe({ route }) {
   const { recipeID } = route.params;
   const [recipeData, setRecipeData] = React.useState({});
   const [formattedIngredients, setFormattedIngredients] = React.useState([]);
   const [isFavorite, setIsFavorite] = useState(false);
+  const isFocused = useIsFocused();
+
 
   const getRecipe = async () => {
     const response = await fetch("https://www.themealdb.com/api/json/v1/1/lookup.php?i=" + recipeID);
@@ -42,25 +46,31 @@ export default function Recipe({ route }) {
     } else {
       addToFavorites();
     }
-  }
+  };
 
   const addToFavorites = async () => {
     try {
-      await AsyncStorage.setItem('recipe:' + recipeID, JSON.stringify(recipeData));
+      await AsyncStorage.setItem("recipe:" + recipeID, JSON.stringify(recipeData));
       setIsFavorite(true);
+      showMessage({
+        message: "Recipe added to favorites."
+      });
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   const removeFromFavorites = async () => {
     try {
-      await AsyncStorage.removeItem('recipe:' + recipeID);
+      await AsyncStorage.removeItem("recipe:" + recipeID);
       setIsFavorite(false);
+      showMessage({
+        message: "Recipe removed from favorites."
+      });
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   const FavoriteButton = () => {
     return (
@@ -69,21 +79,25 @@ export default function Recipe({ route }) {
         onPress={favoriteButtonHandler}
       >
         {isFavorite ? <Image
-          source={require('../assets/heart-full.png')}
-          style={{width: 35, height: 35,
-            resizeMode: "contain"}}
+          source={require("../assets/heart-full.png")}
+          style={{
+            width: 35, height: 35,
+            resizeMode: "contain",
+          }}
         /> : <Image
-          source={require('../assets/heart-empty.png')}
-          style={{width: 35, height: 35,
-            resizeMode: "contain"}}
+          source={require("../assets/heart-empty.png")}
+          style={{
+            width: 35, height: 35,
+            resizeMode: "contain",
+          }}
         />}
       </Pressable>
-    )
-  }
+    );
+  };
 
   const checkIfFavorite = async () => {
     try {
-      const value = await AsyncStorage.getItem('recipe:' + recipeID);
+      const value = await AsyncStorage.getItem("recipe:" + recipeID);
       if (value !== null) {
         return true;
       } else {
@@ -92,11 +106,15 @@ export default function Recipe({ route }) {
     } catch (e) {
       console.log(e);
     }
-  }
+  };
 
   useEffect(() => {
     getRecipe();
   }, []);
+
+  useEffect(() => {
+    getRecipe();
+  }, [isFocused]);
 
   const recipeHeader = () => {
     if (!recipeData) {
@@ -155,23 +173,40 @@ export default function Recipe({ route }) {
           ))}
         </View>
         <View>
-          <Pressable onPress={addToShoppingList}><Text style={styles.shoppingListButton}>Add Ingredients to Shopping List</Text></Pressable>
+          <Pressable
+            onPress={addToShoppingList}
+            style={styles.shoppingListButtonContainer}
+          >
+            <Text style={styles.shoppingListButton}>Add Ingredients to Shopping List</Text>
+          </Pressable>
         </View>
       </View>
     );
   };
 
   const addToShoppingList = async () => {
+    const checkIfPresent = await AsyncStorage.getItem("list:" + recipeData.strMeal);
+    if (checkIfPresent !== null) {
+      showMessage({
+        message: "Ingredients already in Shopping List."
+      });
+
+      return;
+    }
     const shoppingList = formattedIngredients.map((element, index) => {
       return {
         id: index,
         checked: false,
-        text: element.measure + ' ' + element.ingredient
-      }
+        text: element.measure + " " + element.ingredient,
+      };
     });
 
-    await AsyncStorage.setItem('list:' + recipeData.strMeal, JSON.stringify(shoppingList));
-  }
+    await AsyncStorage.setItem("list:" + recipeData.strMeal, JSON.stringify(shoppingList));
+
+    showMessage({
+      message: "Ingredients added to Shopping List."
+    });
+  };
 
   const recipeDirections = () => {
     if (!recipeData) {
@@ -234,8 +269,8 @@ const styles = StyleSheet.create({
       position: "relative",
       margin: 10,
       borderRadius: 50,
-      alignItems: 'center',
-      justifyContent: 'center',
+      alignItems: "center",
+      justifyContent: "center",
     },
     recipeHeaderText: {
       margin: 15,
@@ -272,12 +307,20 @@ const styles = StyleSheet.create({
       marginLeft: 10,
       color: "#6E449CFF",
     },
+    shoppingListButtonContainer: {
+      alignSelf: 'center',
+      borderStyle: "solid",
+      borderColor: "#6E449CFF",
+      borderWidth: 2,
+      padding: 7,
+      borderRadius: 15
+    },
     shoppingListButton: {
-      fontSize: 20,
+      fontSize: 15,
       textAlign: "center",
-      marginTop: 5,
       fontWeight: "bold",
       color: "#6E449CFF",
+
     },
     instructionsContainer: {
       marginTop: 20,

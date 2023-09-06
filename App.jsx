@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, SafeAreaView, ScrollView, Image, StatusBar } from "react-native";
+import React from "react";
+import {SafeAreaView, Image, StatusBar } from "react-native";
 import Search from "./pages/Search";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { NavigationContainer } from "@react-navigation/native";
@@ -12,6 +12,7 @@ import LinearGradient from "react-native-linear-gradient";
 import Category from "./pages/Category";
 import ShoppingList from "./pages/ShoppingList";
 import UnitConverter from "./pages/UnitConverter";
+import FlashMessage from "react-native-flash-message";
 
 function App() {
   const Stack = createStackNavigator();
@@ -132,6 +133,8 @@ function App() {
           />
         </Tab.Navigator>
       </NavigationContainer>
+        <FlashMessage position="bottom" style={{backgroundColor: "white"}} titleStyle={{color: "#6E449CFF"}}/>
+
     </SafeAreaView>
   );
 }

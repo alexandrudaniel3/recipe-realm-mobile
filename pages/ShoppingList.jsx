@@ -21,7 +21,6 @@ export default function ShoppingList() {
   };
 
   useEffect(() => {
-
     initializeLists();
   }, []);
 

@@ -18,11 +18,11 @@ const NewEntry = ({ addEntry }) => {
     <View style={{ flexDirection: "row", alignItems: "center" }}>
       <TextInput style={{
         flex: 1,
-        height: 40,
+        height: 50,
         margin: 12,
-        borderWidth: 1,
+        borderWidth: 2,
         padding: 10,
-        borderRadius: 50,
+        borderRadius: 15,
         borderColor: "#6E449CFF",
         color: "#6E449CFF",
       }}
