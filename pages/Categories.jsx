@@ -4,19 +4,6 @@ import React, { useEffect, useState } from "react";
 
 export default function Categories({navigation}) {
   const [categories, setCategories] = React.useState([]);
-  const [selectedCategory, setSelectedCategory] = React.useState('');
-  const [recipesByCategory, setRecipesByCategory] = React.useState([]);
-
-  const searchByCategory = async () => {
-    if (selectedCategory === '') {
-      return;
-    }
-    const results = await fetch('https://www.themealdb.com/api/json/v1/1/filter.php?c=' + selectedCategory)
-      .then(response => response.json())
-      .then(data => data.meals);
-
-    setRecipesByCategory(results);
-  }
 
   const getCategories = async () => {
     let results = await fetch("https://www.themealdb.com/api/json/v1/1/list.php?c=list")
@@ -32,31 +19,8 @@ export default function Categories({navigation}) {
     getCategories();
   }, []);
 
-  // useEffect(() => {
-  //   searchByCategory();
-  // }, [selectedCategory]);
-
-  // const displayRecipesByCategory = () => {
-  //   if (!selectedCategory || !recipesByCategory) {
-  //     return (
-  //       <View>
-  //         <Text>Select a category.</Text>
-  //       </View>
-  //     );
-  //   }
-  //   return (
-  //     <ScrollView>
-  //       {recipesByCategory.length !== 0 ?
-  //         recipesByCategory.map((recipe, index) => (
-  //           <RecipeCard key={index} id={index} props={recipe} navigation={navigation}/>
-  //         )) : null}
-  //     </ScrollView>
-  //   )
-  // }
-
   return (
     <View style={{ flex: 1 }}>
-      {/*<View style={{flex: 1}}>*/}
       <Text style={styles.categoriesHeader}>
         Select a category:
       </Text>
@@ -72,10 +36,6 @@ export default function Categories({navigation}) {
               </Pressable>
             )) : null}
         </ScrollView>
-      {/*</View>*/}
-      {/*<View style={{flex: 10}}>*/}
-      {/*  {displayRecipesByCategory()}*/}
-      {/*</View>*/}
     </View>
   );
 }

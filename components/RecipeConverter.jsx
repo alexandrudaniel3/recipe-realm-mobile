@@ -205,12 +205,13 @@ const styles = StyleSheet.create({
       borderColor: "#6E449CFF",
       borderRadius: 10,
       borderWidth: 2,
-      padding: 5,
+      padding: 8,
       margin: 2
     },
     frequentButtonText: {
       fontWeight: "bold",
       color: "#6E449CFF",
+      fontSize: 18
     },
   },
 );

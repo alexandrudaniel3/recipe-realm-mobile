@@ -116,7 +116,7 @@ export default function Recipe({ route }) {
     getRecipe();
   }, [isFocused]);
 
-  const recipeHeader = () => {
+  const RecipeHeader = () => {
     if (!recipeData) {
       return;
     }
@@ -151,7 +151,7 @@ export default function Recipe({ route }) {
     setFormattedIngredients(updatedIngredients);
   };
 
-  const recipeIngredients = () => {
+  const RecipeIngredients = () => {
     if (!recipeData) {
       return;
     }
@@ -208,7 +208,7 @@ export default function Recipe({ route }) {
     });
   };
 
-  const recipeDirections = () => {
+  const RecipeDirections = () => {
     if (!recipeData) {
       return;
     }
@@ -223,7 +223,7 @@ export default function Recipe({ route }) {
     );
   };
 
-  const recipeShare = () => {
+  const RecipeShare = () => {
 
     return (
       <Pressable
@@ -246,10 +246,10 @@ export default function Recipe({ route }) {
   return (
     <View style={{ flex: 1 }}>
       <ScrollView>
-        {recipeHeader()}
-        {recipeShare()}
-        {recipeIngredients()}
-        {recipeDirections()}
+        <RecipeHeader />
+        <RecipeShare />
+        <RecipeIngredients />
+        <RecipeDirections />
       </ScrollView>
     </View>
   );
