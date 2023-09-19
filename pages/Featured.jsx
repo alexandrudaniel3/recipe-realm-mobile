@@ -4,9 +4,16 @@ import RecipeCard from "../components/RecipeCard";
 import SplashScreen from "react-native-splash-screen";
 import shoppingBag from '../assets/shopping-bag.png';
 import scale from '../assets/scale.png';
-import settingsIcon from '../assets/settings.png';
+import settingsIcon from '../assets/settings2.png';
+import randomIcon from '../assets/random2.png';
 
+const getRandomRecipeID = async () => {
+  const randomRecipe = await fetch("https://www.themealdb.com/api/json/v1/1/random.php")
+    .then(response => response.json())
+    .then(data => data.meals[0]);
 
+  return randomRecipe.idMeal;
+}
 export default function Featured({ navigation }) {
   const [recipes, setRecipes] = useState([]);
 
@@ -45,13 +52,24 @@ export default function Featured({ navigation }) {
         <Image source={scale} style={{ width: 50, height: undefined, aspectRatio: 1}}/>
         <Text style={{textAlign: "center", color: "#802C6DFF" }}>Unit Converter</Text>
       </Pressable>
+        <Pressable onPress={ async () => {
+          const randomID = await getRandomRecipeID();
+          navigation.navigate('Recipe', {
+            recipeID: randomID,
+          });
+        }}
+                   style={{width: 80, alignItems: "center"}}>
+          <Image source={randomIcon} style={{ width: 50, height: undefined, aspectRatio: 1}}/>
+          <Text style={{textAlign: "center", color: "#6E449CFF" }}>Random Recipe</Text>
+        </Pressable>
         <Pressable onPress={() => {
           navigation.navigate("Settings");
         }}
                    style={{width: 80, alignItems: "center"}}>
           <Image source={settingsIcon} style={{ width: 50, height: undefined, aspectRatio: 1}}/>
-          <Text style={{textAlign: "center", color: "#6E449CFF" }}>Settings</Text>
+          <Text style={{textAlign: "center", color: "#5257a7FF" }}>Settings</Text>
         </Pressable>
+
       </ScrollView>
       <ScrollView>
         {recipes.map((recipe, index) => (
