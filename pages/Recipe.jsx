@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Image, ScrollView, ImageBackground, Pressable } from "react-native";
+import { View, Text, StyleSheet, Image, ScrollView, ImageBackground, Pressable, Share } from "react-native";
 import React, { useEffect, useState } from "react";
 import CheckBox from "@react-native-community/checkbox";
 import LinearGradient from "react-native-linear-gradient";
@@ -53,7 +53,7 @@ export default function Recipe({ route }) {
       await AsyncStorage.setItem("recipe:" + recipeID, JSON.stringify(recipeData));
       setIsFavorite(true);
       showMessage({
-        message: "Recipe added to favorites."
+        message: "Recipe added to favorites.",
       });
     } catch (e) {
       console.log(e);
@@ -65,7 +65,7 @@ export default function Recipe({ route }) {
       await AsyncStorage.removeItem("recipe:" + recipeID);
       setIsFavorite(false);
       showMessage({
-        message: "Recipe removed from favorites."
+        message: "Recipe removed from favorites.",
       });
     } catch (e) {
       console.log(e);
@@ -175,9 +175,9 @@ export default function Recipe({ route }) {
         <View>
           <Pressable
             onPress={addToShoppingList}
-            style={styles.shoppingListButtonContainer}
+            style={styles.recipePageButtonContainer}
           >
-            <Text style={styles.shoppingListButton}>Add Ingredients to Shopping List</Text>
+            <Text style={styles.recipePageButton}>Add Ingredients to Shopping List</Text>
           </Pressable>
         </View>
       </View>
@@ -188,7 +188,7 @@ export default function Recipe({ route }) {
     const checkIfPresent = await AsyncStorage.getItem("list:" + recipeData.strMeal);
     if (checkIfPresent !== null) {
       showMessage({
-        message: "Ingredients already in Shopping List."
+        message: "Ingredients already in Shopping List.",
       });
 
       return;
@@ -204,7 +204,7 @@ export default function Recipe({ route }) {
     await AsyncStorage.setItem("list:" + recipeData.strMeal, JSON.stringify(shoppingList));
 
     showMessage({
-      message: "Ingredients added to Shopping List."
+      message: "Ingredients added to Shopping List.",
     });
   };
 
@@ -223,11 +223,31 @@ export default function Recipe({ route }) {
     );
   };
 
+  const recipeShare = () => {
+
+    return (
+      <Pressable
+        onPress={async () => {
+          await Share.share({
+            message: `Check out this recipe for '${recipeData.strMeal}' I found on RecipeRealm! http://alexandrudaniel3.github.io/recipe-app-react/#/recipe/${recipeID}/`,
+          });
+        }}
+        style={styles.recipePageButtonContainer}
+      >
+        <Text style={styles.recipePageButton}>Share Recipe</Text>
+        <Image
+          style={{ width: 18, height: 18, alignSelf: "center", tintColor: "#6E449CFF", marginLeft: 3 }}
+          source={require("../assets/share_icon.png")}
+        />
+      </Pressable>
+    );
+  };
 
   return (
     <View style={{ flex: 1 }}>
       <ScrollView>
         {recipeHeader()}
+        {recipeShare()}
         {recipeIngredients()}
         {recipeDirections()}
       </ScrollView>
@@ -307,20 +327,20 @@ const styles = StyleSheet.create({
       marginLeft: 10,
       color: "#6E449CFF",
     },
-    shoppingListButtonContainer: {
-      alignSelf: 'center',
+    recipePageButtonContainer: {
+      alignSelf: "center",
       borderStyle: "solid",
       borderColor: "#6E449CFF",
       borderWidth: 2,
       padding: 7,
-      borderRadius: 15
+      borderRadius: 15,
+      flexDirection: "row"
     },
-    shoppingListButton: {
+    recipePageButton: {
       fontSize: 15,
       textAlign: "center",
       fontWeight: "bold",
       color: "#6E449CFF",
-
     },
     instructionsContainer: {
       marginTop: 20,
