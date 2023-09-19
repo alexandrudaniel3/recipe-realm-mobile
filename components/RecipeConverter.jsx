@@ -1,7 +1,6 @@
 import { useEffect, useState } from "react";
-import DropDownPicker from "react-native-dropdown-picker";
 import { units, ingredientsDensity } from "../utils/conversionData";
-import { View, Text, TextInput, StyleSheet, Platform } from "react-native";
+import { View, Text, TextInput, StyleSheet, Platform, Pressable } from "react-native";
 import { convertData } from "../utils/conversionData";
 import { Dropdown } from "react-native-element-dropdown";
 
@@ -27,19 +26,10 @@ function ValueBox({ value, setValue }) {
 
 export default function RecipeConverter() {
   const [fromUnit, setFromUnit] = useState("m:g");
-  const [fromOpen, setFromOpen] = useState(false);
-  const [toOpen, setToOpen] = useState(false);
   const [toUnit, setToUnit] = useState("m:kg");
   const [ingredientDensity, setIngredientDensity] = useState(1.00);
-  const [ingredientOpen, setIngredientOpen] = useState(false);
   const [value, setValue] = useState(0);
   const [result, setResult] = useState("");
-
-  const closeOtherPickers = (currentPicker) => {
-    if (currentPicker !== "from") setFromOpen(false);
-    if (currentPicker !== "to") setToOpen(false);
-    if (currentPicker !== "ingredient") setIngredientOpen(false);
-  };
 
   function handleSubmit() {
     if (value) {
@@ -84,6 +74,33 @@ export default function RecipeConverter() {
 
   };
 
+  const FrequentButtons = () => {
+    return (
+      <View style={styles.frequentButtonsContainer}>
+        <Pressable style={styles.frequentButton}
+                   onPress={() => setValue(0.25)}>
+          <Text style={styles.frequentButtonText}>1/4</Text>
+        </Pressable>
+        <Pressable style={styles.frequentButton}
+                   onPress={() => setValue(0.33)}>
+          <Text style={styles.frequentButtonText}>1/3</Text>
+        </Pressable>
+        <Pressable style={styles.frequentButton}
+                   onPress={() => setValue(0.5)}>
+          <Text style={styles.frequentButtonText}>1/2</Text>
+        </Pressable>
+        <Pressable style={styles.frequentButton}
+                   onPress={() => setValue(0.66)}>
+          <Text style={styles.frequentButtonText}>2/3</Text>
+        </Pressable>
+        <Pressable style={styles.frequentButton}
+                   onPress={() => setValue(0.75)}>
+          <Text style={styles.frequentButtonText}>3/4</Text>
+        </Pressable>
+      </View>
+    );
+  };
+
   return (
     <View style={{ marginHorizontal: 10 }}>
       <Text style={styles.fromTo}>From:</Text>
@@ -112,6 +129,7 @@ export default function RecipeConverter() {
       />
       <DisplayIngredientPicker />
       <ValueBox setValue={setValue} />
+      <FrequentButtons />
       {result ?
         <Text style={styles.resultText}>{result}</Text> :
         null}
@@ -176,6 +194,22 @@ const styles = StyleSheet.create({
       margin: 10,
       fontWeight: "bold",
       fontSize: 30,
+      color: "#6E449CFF",
+    },
+    frequentButtonsContainer: {
+      flexDirection: "row",
+      alignSelf: "center"
+    },
+    frequentButton: {
+      borderStyle: "solid",
+      borderColor: "#6E449CFF",
+      borderRadius: 10,
+      borderWidth: 2,
+      padding: 5,
+      margin: 2
+    },
+    frequentButtonText: {
+      fontWeight: "bold",
       color: "#6E449CFF",
     },
   },
