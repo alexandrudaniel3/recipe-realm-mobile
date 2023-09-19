@@ -88,6 +88,7 @@ export default function Featured({ navigation }) {
 const styles = StyleSheet.create({
   featuredMain: {
     marginTop: 10,
+    flex: 1,
   }
 })
 
