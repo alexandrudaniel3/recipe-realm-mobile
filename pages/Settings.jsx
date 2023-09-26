@@ -2,6 +2,18 @@ import { View, Text, StyleSheet, Pressable, Alert } from "react-native";
 import button from "react-native-paper/src/components/Button/Button";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
+function Divider() {
+  return (
+    <View
+      style={{
+        borderBottomColor: "#6E449CFF",
+        borderBottomWidth: 1,
+        marginHorizontal: 10,
+      }}
+    />
+  );
+}
+
 export default function Settings() {
 
   const clearFavoritesData = async () => {
@@ -52,7 +64,7 @@ export default function Settings() {
 
   const ClearDataButton = ({ buttonText, dataFunction }) => {
     return (
-      <Pressable onPress={dataFunction}>
+      <Pressable onPress={dataFunction} style={styles.settingsButton}>
         <Text style={styles.settingsText}>
           {buttonText}
         </Text>
@@ -62,18 +74,18 @@ export default function Settings() {
 
   const displayConfirmationPopUp = (alertMessage, dataFunction) => {
     Alert.alert(
-      'Are you sure?',
+      "Are you sure?",
       alertMessage,
       [
         {
-          text: 'Cancel',
-          style: 'cancel',
+          text: "Cancel",
+          style: "cancel",
         },
         {
-          text: 'Delete',
+          text: "Delete",
           onPress: dataFunction,
-        }
-      ]
+        },
+      ],
     );
   };
 
@@ -83,13 +95,15 @@ export default function Settings() {
       <Text style={styles.settingsTitle}>Manage your data</Text>
       <ClearDataButton
         buttonText={"Clear Favorites data"}
-        dataFunction={() => displayConfirmationPopUp('This action will delete all the recipes you have saved in your Favorites section.', clearFavoritesData)} />
+        dataFunction={() => displayConfirmationPopUp("This action will delete all the recipes you have saved in your Favorites section.", clearFavoritesData)} />
+      <Divider />
       <ClearDataButton
         buttonText={"Clear Shopping List data"}
-        dataFunction={() => displayConfirmationPopUp('This action will delete all your saved recipe shopping lists, and will clear your main shopping list.', clearShoppingListData)} />
+        dataFunction={() => displayConfirmationPopUp("This action will delete all your saved recipe shopping lists, and will clear your main shopping list.", clearShoppingListData)} />
+      <Divider />
       <ClearDataButton
         buttonText={"Clear all RecipeRealm data"}
-        dataFunction={() => displayConfirmationPopUp('This action will delete ALL your RecipeRealm data.', clearAllData)} />
+        dataFunction={() => displayConfirmationPopUp("This action will delete ALL your RecipeRealm data.", clearAllData)} />
     </View>
   );
 }
@@ -107,6 +121,9 @@ const styles = StyleSheet.create({
     color: "#6E449CFF",
     margin: 20,
     fontWeight: "bold",
+  },
+  settingsButton: {
+    paddingVertical: 8,
   },
   settingsText: {
     color: "#6E449CFF",

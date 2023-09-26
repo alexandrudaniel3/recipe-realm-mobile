@@ -1,4 +1,4 @@
-package com.recipemobileapp;
+package com.reciperealm;
 
 import android.app.Application;
 import com.facebook.react.PackageList;

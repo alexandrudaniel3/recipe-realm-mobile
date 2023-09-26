@@ -14,6 +14,7 @@ import ShoppingList from "./pages/ShoppingList";
 import UnitConverter from "./pages/UnitConverter";
 import FlashMessage from "react-native-flash-message";
 import Settings from "./pages/Settings";
+import { SafeAreaProvider } from "react-native-safe-area-context";
 
 function App() {
   const Stack = createStackNavigator();
@@ -61,14 +62,14 @@ function App() {
 
   const Tab = createBottomTabNavigator();
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaProvider style={{ flex: 1 }}>
       <LinearGradient
         colors={["#C94061FF", "#802C6DFF", "#6E449CFF", "#5257A7FF"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 0 }}
       >
         <StatusBar
-          translucent={true} backgroundColor={"transparent"}
+          translucent={true} backgroundColor={"transparent"} barStyle={"light-content"}
         />
       </LinearGradient>
       <NavigationContainer style={{ flex: 1 }}>
@@ -137,7 +138,7 @@ function App() {
       </NavigationContainer>
         <FlashMessage position="bottom" style={{backgroundColor: "white"}} titleStyle={{color: "#6E449CFF"}}/>
 
-    </SafeAreaView>
+    </SafeAreaProvider>
   );
 }
 
